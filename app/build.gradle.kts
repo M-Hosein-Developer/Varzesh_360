@@ -5,12 +5,12 @@ plugins {
 
 android {
     namespace = "ir.androidcoder.varzesh360"
-    compileSdk = 34
+    compileSdkPreview = "VanillaIceCream"
 
     defaultConfig {
         applicationId = "ir.androidcoder.varzesh360"
         minSdk = 21
-        targetSdk = 34
+        targetSdkPreview = "VanillaIceCream"
         versionCode = 1
         versionName = "1.0"
 
