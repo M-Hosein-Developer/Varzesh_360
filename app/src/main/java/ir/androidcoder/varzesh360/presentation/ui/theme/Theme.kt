@@ -1,4 +1,4 @@
-package ir.androidcoder.varzesh360.ui.theme
+package ir.androidcoder.varzesh360.presentation.ui.theme
 
 import android.app.Activity
 import android.os.Build

@@ -1,4 +1,4 @@
-package ir.androidcoder.varzesh360.ui.theme
+package ir.androidcoder.varzesh360.presentation.ui.theme
 
 import androidx.compose.ui.graphics.Color
 
