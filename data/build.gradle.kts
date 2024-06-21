@@ -15,4 +15,7 @@ dependencies{
     implementation(libs.converter.gson)
     implementation(project(":domain"))
 
+
+    //Coroutines
+    implementation(libs.kotlinx.coroutines.android)
 }

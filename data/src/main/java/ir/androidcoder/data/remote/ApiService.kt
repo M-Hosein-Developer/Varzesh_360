@@ -7,7 +7,7 @@ import retrofit2.http.Query
 interface ApiService {
 
     @GET("football360/news/list")
-    fun getNewsList(
+    suspend fun getNewsList(
         @Query("page") page: Int,
         @Query("license") license: String = "14kDIdzjZw8wqCzb9CxOrPtQpgSNmllIDSKqiq"
     ) : NewsListResponse
