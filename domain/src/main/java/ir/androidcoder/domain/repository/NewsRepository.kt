@@ -4,6 +4,6 @@ import ir.androidcoder.domain.entities.NewsEntity
 
 interface NewsRepository {
 
-    suspend fun getNews() : List<NewsEntity>
+    suspend fun getNews(pageNumber : Int) : List<NewsEntity>
 
 }

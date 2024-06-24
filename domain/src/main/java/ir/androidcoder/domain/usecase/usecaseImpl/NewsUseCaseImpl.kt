@@ -6,6 +6,6 @@ import ir.androidcoder.domain.usecase.NewsUseCase
 
 class NewsUseCaseImpl(private val newsRepository: NewsRepository) : NewsUseCase {
 
-    override suspend fun getNews(): List<NewsEntity> = newsRepository.getNews()
+    override suspend fun getNews(pageNumber : Int): List<NewsEntity> = newsRepository.getNews(pageNumber)
 
 }
