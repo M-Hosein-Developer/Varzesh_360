@@ -33,6 +33,7 @@ import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
 import dagger.hilt.android.AndroidEntryPoint
 import ir.androidcoder.varzesh360.screen.feature.NewsScreen
+import ir.androidcoder.varzesh360.screen.feature.SettingScreen
 import ir.androidcoder.varzesh360.screen.ui.theme.Varzesh360Theme
 import ir.androidcoder.varzesh360.util.MyScreen
 import ir.androidcoder.varzesh360.viewModel.NewsViewModel
@@ -68,6 +69,19 @@ fun MainUi(newsViewModel: NewsViewModel) {
     var isVisible by remember { mutableStateOf(true) }
 
 
+    NavHost(navController = navController, startDestination = MyScreen.NewsScreen.route) {
+
+        composable(MyScreen.NewsScreen.route) {
+            NewsScreen(newsViewModel)
+        }
+
+        composable(MyScreen.SettingScreen.route) {
+            SettingScreen()
+        }
+
+    }
+
+
     if (isVisible) {
         NavigationBar(
             modifier = Modifier
@@ -83,7 +97,7 @@ fun MainUi(newsViewModel: NewsViewModel) {
                     .align(Alignment.CenterVertically)
                     .padding(top = 24.dp),
                 selected = false,
-                onClick = { },
+                onClick = { navController.navigate(MyScreen.NewsScreen.route) },
                 icon = {
                     Icon(
                         imageVector = Icons.Outlined.Home,
@@ -100,7 +114,7 @@ fun MainUi(newsViewModel: NewsViewModel) {
                     .align(Alignment.CenterVertically)
                     .padding(top = 24.dp),
                 selected = false,
-                onClick = { },
+                onClick = { navController.navigate(MyScreen.SettingScreen.route) },
                 icon = {
                     Icon(
                         imageVector = Icons.Outlined.Settings,
