@@ -1,5 +1,8 @@
 package ir.androidcoder.varzesh360.viewModel
 
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.setValue
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import dagger.hilt.android.lifecycle.HiltViewModel
@@ -21,6 +24,11 @@ class NewsViewModel @Inject constructor(private val newsUseCase: NewsUseCase) : 
     //News State
     private val _newsState = MutableStateFlow<NewsState>(NewsState.Idle)
     val newsState : StateFlow<NewsState> get() = _newsState
+
+
+    //Search State
+    var searchValue by mutableStateOf("")
+
 
     init {
         handleIntent()
