@@ -15,10 +15,10 @@
       </SelectionState>
       <SelectionState runConfigName="presentatiom">
         <option name="selectionMode" value="DROPDOWN" />
-        <DropdownSelection timestamp="2024-06-24T08:47:01.382257Z">
+        <DropdownSelection timestamp="2024-06-26T19:17:11.425202100Z">
           <Target type="DEFAULT_BOOT">
             <handle>
-              <DeviceId pluginId="LocalEmulator" identifier="path=C:\Users\ASUS\.android\avd\Pixel_6_API_VanillaIceCream.avd" />
+              <DeviceId pluginId="LocalEmulator" identifier="path=C:\Users\ASUS\.android\avd\Pixel_4_XL_API_VanillaIceCream.avd" />
             </handle>
           </Target>
         </DropdownSelection>

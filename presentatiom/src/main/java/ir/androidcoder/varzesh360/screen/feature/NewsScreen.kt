@@ -1,10 +1,13 @@
 package ir.androidcoder.varzesh360.screen.feature
 
+import android.util.Log
 import androidx.compose.foundation.ExperimentalFoundationApi
+import androidx.compose.foundation.background
 import androidx.compose.foundation.border
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.combinedClickable
 import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxSize
@@ -12,6 +15,9 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.layout.width
+import androidx.compose.foundation.lazy.LazyColumn
+import androidx.compose.foundation.lazy.LazyRow
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.outlined.Notifications
@@ -20,6 +26,7 @@ import androidx.compose.material3.OutlinedTextField
 import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
@@ -27,14 +34,22 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
+import androidx.compose.ui.draw.shadow
+import androidx.compose.ui.graphics.Brush.Companion.linearGradient
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.text.style.TextDirection
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import coil.compose.AsyncImage
+import ir.androidcoder.domain.entities.NewsEntity
 import ir.androidcoder.varzesh360.R
+import ir.androidcoder.varzesh360.newsIntent.NewsIntent
+import ir.androidcoder.varzesh360.newsState.NewsState
+import ir.androidcoder.varzesh360.screen.ui.theme.NoColor
 import ir.androidcoder.varzesh360.viewModel.NewsViewModel
 
 @Composable
@@ -42,6 +57,31 @@ fun NewsScreen(newsViewModel: NewsViewModel) {
 
     val context = LocalContext.current
     var counter by remember { mutableStateOf(1) }
+    var newsData by remember { mutableStateOf<List<NewsEntity>?>(null) }
+
+    LaunchedEffect(counter) {
+
+        newsViewModel.dataIntent.send(NewsIntent.FetchNewsData(counter))
+
+        newsViewModel.newsState.collect {
+
+            when (it) {
+
+                is NewsState.Idle -> {}
+                is NewsState.NewsData -> {
+                    newsData = it.news
+                }
+
+                is NewsState.NewsError -> {
+                    Log.v("error", it.error!!)
+                }
+
+            }
+
+        }
+
+    }
+
 
     Column(
         Modifier
@@ -65,9 +105,12 @@ fun NewsScreen(newsViewModel: NewsViewModel) {
                 counter++
             },
             {
-                counter = 0
+                counter = 1
             }
         )
+
+        NewsHorizontal(newsData)
+
 
     }
 
@@ -99,7 +142,7 @@ fun CostumeToolbar(onProfileClicked :() -> Unit , onAlarmClicked :() -> Unit){
             modifier = Modifier
                 .size(52.dp)
                 .clip(RoundedCornerShape(16.dp))
-                .clickable(true, "", null, { onAlarmClicked.invoke() })
+                .clickable(true, "", null) { onAlarmClicked.invoke() }
                 .border(1.dp, Color.LightGray, RoundedCornerShape(16.dp))
                 .padding(8.dp)
 
@@ -141,9 +184,9 @@ fun SearchNews(
             .padding(horizontal = 28.dp)
             .padding(vertical = 18.dp)
             .combinedClickable(
-            onClick = { onCounterClicked.invoke() },
-            onLongClick = { onCounterLongClicked.invoke() }
-        )
+                onClick = { onCounterClicked.invoke() },
+                onLongClick = { onCounterLongClicked.invoke() }
+            )
     ) {
 
         Text(
@@ -159,3 +202,83 @@ fun SearchNews(
     }
 
 }
+
+//Horizontal
+@Composable
+fun NewsHorizontal(newsData: List<NewsEntity>?) {
+
+
+    if (newsData != null) {
+
+        LazyRow(
+            Modifier.padding(top = 32.dp)
+        ) {
+
+            items(newsData.size) {
+                Log.v("testDataScreen", newsData.toString())
+                NewsItemHorizontal(newsData[it])
+            }
+
+        }
+
+    }
+
+}
+
+@Composable
+fun NewsItemHorizontal(newsEntity: NewsEntity) {
+
+    Box(
+        modifier = Modifier
+            .height(350.dp)
+            .width(379.dp)
+            .padding(end = 16.dp)
+            .shadow(12.dp , RoundedCornerShape(32.dp) , true)
+
+    ) {
+
+
+        AsyncImage(
+            model = newsEntity.primary_media.file,
+            contentDescription = null,
+            modifier = Modifier
+                .fillMaxSize(),
+            contentScale = ContentScale.Crop
+        )
+
+
+        Column(
+            modifier = Modifier
+                .fillMaxSize()
+                .background(
+                    brush = linearGradient(
+                        colors = listOf(NoColor, Color.Black),
+                        start = androidx.compose.ui.geometry.Offset(500f, 100f),
+                        end = androidx.compose.ui.geometry.Offset(500f, 900f)
+                    )
+                ),
+            verticalArrangement = Arrangement.Bottom,
+            horizontalAlignment = Alignment.End
+
+        ) {
+
+            Text(
+                text = newsEntity.title,
+                style = TextStyle(
+                    fontWeight = FontWeight.Bold,
+                    fontSize = 24.sp,
+                    textDirection = TextDirection.Rtl
+                ),
+                color = Color.White,
+                modifier = Modifier
+                    .padding(bottom = 24.dp , end = 18.dp , start = 18.dp),
+                maxLines = 3
+                )
+
+        }
+
+    }
+
+}
+
+
