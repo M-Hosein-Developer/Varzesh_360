@@ -22,6 +22,7 @@ import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.outlined.Notifications
 import androidx.compose.material3.Icon
+import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.OutlinedTextField
 import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
@@ -265,8 +266,9 @@ fun NewsItemHorizontal(newsEntity: NewsEntity) {
                 text = newsEntity.title,
                 style = TextStyle(
                     fontWeight = FontWeight.Bold,
-                    fontSize = 24.sp,
-                    textDirection = TextDirection.Rtl
+                    fontSize = 20.sp,
+                    textDirection = TextDirection.Rtl,
+                    fontFamily = MaterialTheme.typography.bodyLarge.fontFamily
                 ),
                 color = Color.White,
                 modifier = Modifier
@@ -290,7 +292,7 @@ fun NewsVertical(newsData: List<NewsEntity>?) {
         val evenIndexedNews = newsData.filterIndexed { index, _ -> index % 3 == 0 }
 
         LazyColumn(
-            Modifier.padding(top = 32.dp)
+            Modifier.padding(top = 16.dp)
         ) {
 
             Log.v("tetsindext", evenIndexedNews.toString())
@@ -346,8 +348,9 @@ fun NewsItemVertical(newsEntity: NewsEntity) {
                 text = newsEntity.title,
                 style = TextStyle(
                     fontWeight = FontWeight.Bold,
-                    fontSize = 24.sp,
-                    textDirection = TextDirection.Rtl
+                    fontSize = 20.sp,
+                    textDirection = TextDirection.Rtl,
+                    fontFamily = MaterialTheme.typography.bodyLarge.fontFamily
                 ),
                 color = Color.White,
                 modifier = Modifier
