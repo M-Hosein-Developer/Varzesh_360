@@ -111,6 +111,8 @@ fun NewsScreen(newsViewModel: NewsViewModel) {
 
         NewsHorizontal(newsData)
 
+        NewsVertical(newsData)
+
 
     }
 
@@ -207,20 +209,17 @@ fun SearchNews(
 @Composable
 fun NewsHorizontal(newsData: List<NewsEntity>?) {
 
-
     if (newsData != null) {
 
+        val evenIndexedNews = newsData.filterIndexed { index, _ -> index % 2 == 0 }
+
         LazyRow(
-            Modifier.padding(top = 32.dp)
+            modifier = Modifier.padding(top = 32.dp)
         ) {
-
-            items(newsData.size) {
-                Log.v("testDataScreen", newsData.toString())
-                NewsItemHorizontal(newsData[it])
+            items(evenIndexedNews.size) { newsItem ->
+                NewsItemHorizontal(evenIndexedNews[newsItem])
             }
-
         }
-
     }
 
 }
@@ -233,7 +232,7 @@ fun NewsItemHorizontal(newsEntity: NewsEntity) {
             .height(350.dp)
             .width(379.dp)
             .padding(end = 16.dp)
-            .shadow(12.dp , RoundedCornerShape(32.dp) , true)
+            .shadow(12.dp, RoundedCornerShape(32.dp), true)
 
     ) {
 
@@ -281,4 +280,84 @@ fun NewsItemHorizontal(newsEntity: NewsEntity) {
 
 }
 
+//Vertical
+@Composable
+fun NewsVertical(newsData: List<NewsEntity>?) {
+
+
+    if (newsData != null) {
+
+        val evenIndexedNews = newsData.filterIndexed { index, _ -> index % 3 == 0 }
+
+        LazyColumn(
+            Modifier.padding(top = 32.dp)
+        ) {
+
+            Log.v("tetsindext", evenIndexedNews.toString())
+
+            items(evenIndexedNews.size) { newsItem ->
+                NewsItemVertical(evenIndexedNews[newsItem])
+            }
+
+        }
+
+    }
+
+}
+
+@Composable
+fun NewsItemVertical(newsEntity: NewsEntity) {
+
+    Box(
+        modifier = Modifier
+            .height(350.dp)
+            .width(379.dp)
+            .padding(bottom = 16.dp)
+            .shadow(12.dp, RoundedCornerShape(32.dp), true)
+
+    ) {
+
+
+        AsyncImage(
+            model = newsEntity.primary_media.file,
+            contentDescription = null,
+            modifier = Modifier
+                .fillMaxSize(),
+            contentScale = ContentScale.Crop
+        )
+
+
+        Column(
+            modifier = Modifier
+                .fillMaxSize()
+                .background(
+                    brush = linearGradient(
+                        colors = listOf(NoColor, Color.Black),
+                        start = androidx.compose.ui.geometry.Offset(500f, 100f),
+                        end = androidx.compose.ui.geometry.Offset(500f, 900f)
+                    )
+                ),
+            verticalArrangement = Arrangement.Bottom,
+            horizontalAlignment = Alignment.End
+
+        ) {
+
+            Text(
+                text = newsEntity.title,
+                style = TextStyle(
+                    fontWeight = FontWeight.Bold,
+                    fontSize = 24.sp,
+                    textDirection = TextDirection.Rtl
+                ),
+                color = Color.White,
+                modifier = Modifier
+                    .padding(bottom = 24.dp , end = 18.dp , start = 18.dp),
+                maxLines = 3
+            )
+
+        }
+
+    }
+
+}
 
