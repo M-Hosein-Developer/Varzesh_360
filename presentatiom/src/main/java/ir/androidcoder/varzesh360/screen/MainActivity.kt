@@ -5,6 +5,10 @@ import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.activity.viewModels
+import androidx.compose.animation.AnimatedVisibility
+import androidx.compose.animation.core.tween
+import androidx.compose.animation.slideInVertically
+import androidx.compose.animation.slideOutVertically
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
@@ -72,7 +76,7 @@ fun MainUi(newsViewModel: NewsViewModel) {
     NavHost(navController = navController, startDestination = MyScreen.NewsScreen.route) {
 
         composable(MyScreen.NewsScreen.route) {
-            NewsScreen(newsViewModel)
+            NewsScreen(newsViewModel){ isVisible = it }
         }
 
         composable(MyScreen.SettingScreen.route) {
@@ -82,7 +86,65 @@ fun MainUi(newsViewModel: NewsViewModel) {
     }
 
 
-    if (isVisible) {
+//    if (isVisible) {
+//        NavigationBar(
+//            modifier = Modifier
+//                .wrapContentSize(align = Alignment.BottomCenter)
+//                .height(112.dp)
+//                .padding(horizontal = 42.dp)
+//                .padding(bottom = 32.dp, top = 12.dp)
+//                .clip(RoundedCornerShape(32.dp))
+//        ) {
+//
+//            NavigationBarItem(
+//                modifier = Modifier
+//                    .align(Alignment.CenterVertically)
+//                    .padding(top = 24.dp),
+//                selected = false,
+//                onClick = { navController.navigate(MyScreen.NewsScreen.route) },
+//                icon = {
+//                    Icon(
+//                        imageVector = Icons.Outlined.Home,
+//                        contentDescription = null
+//                    )
+//                },
+//                label = {
+//                    Text(text = "Home")
+//                }
+//            )
+//
+//            NavigationBarItem(
+//                modifier = Modifier
+//                    .align(Alignment.CenterVertically)
+//                    .padding(top = 24.dp),
+//                selected = false,
+//                onClick = { navController.navigate(MyScreen.SettingScreen.route) },
+//                icon = {
+//                    Icon(
+//                        imageVector = Icons.Outlined.Settings,
+//                        contentDescription = null
+//                    )
+//                },
+//                label = {
+//                    Text(text = "Setting")
+//                }
+//            )
+//
+//        }
+//    }
+
+
+    AnimatedVisibility(
+        visible = isVisible,
+        enter = slideInVertically(
+            initialOffsetY = { fullHeight -> fullHeight },
+            animationSpec = tween(durationMillis = 3000)
+        ),
+        exit = slideOutVertically(
+            targetOffsetY = { fullHeight -> fullHeight },
+            animationSpec = tween(durationMillis = 3000)
+        )
+    ) {
         NavigationBar(
             modifier = Modifier
                 .wrapContentSize(align = Alignment.BottomCenter)
@@ -91,7 +153,6 @@ fun MainUi(newsViewModel: NewsViewModel) {
                 .padding(bottom = 32.dp, top = 12.dp)
                 .clip(RoundedCornerShape(32.dp))
         ) {
-
             NavigationBarItem(
                 modifier = Modifier
                     .align(Alignment.CenterVertically)
@@ -125,9 +186,7 @@ fun MainUi(newsViewModel: NewsViewModel) {
                     Text(text = "Setting")
                 }
             )
-
         }
     }
-
-
 }
+

@@ -61,7 +61,7 @@ import ir.androidcoder.varzesh360.viewModel.NewsViewModel
 import kotlinx.coroutines.delay
 
 @Composable
-fun NewsScreen(newsViewModel: NewsViewModel) {
+fun NewsScreen(newsViewModel: NewsViewModel , showBottomNav :(Boolean) -> Unit) {
 
     var counter by remember { mutableIntStateOf(1) }
     var newsData by remember { mutableStateOf<List<NewsEntity>?>(null) }
@@ -125,7 +125,9 @@ fun NewsScreen(newsViewModel: NewsViewModel) {
 
             NewsHorizontal(newsData)
 
-            NewsVertical(newsData)
+            NewsVertical(newsData){
+                showBottomNav.invoke(it)
+            }
 
 
         } else {
@@ -323,7 +325,7 @@ fun NewsItemHorizontal(newsEntity: NewsEntity, alpha: Float) {
 
 //Vertical
 @Composable
-fun NewsVertical(newsData: List<NewsEntity>?) {
+fun NewsVertical(newsData: List<NewsEntity>? , showBottomNav :(Boolean) -> Unit) {
 
 
     if (newsData != null) {
@@ -335,6 +337,13 @@ fun NewsVertical(newsData: List<NewsEntity>?) {
         ) {
 
             items(evenIndexedNews.size) { newsItem ->
+
+                if (newsItem > 1)
+                    showBottomNav.invoke(false)
+                else
+                    showBottomNav.invoke(true)
+
+
                 if (newsItem != 0)
                     AnimatedNewsItemVer(evenIndexedNews[newsItem], newsItem)
             }
