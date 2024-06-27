@@ -1,6 +1,10 @@
+@file:Suppress("UNREACHABLE_CODE")
+
 package ir.androidcoder.varzesh360.screen.feature
 
 import android.util.Log
+import androidx.compose.animation.core.animateFloatAsState
+import androidx.compose.animation.core.tween
 import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
@@ -29,17 +33,18 @@ import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableIntStateOf
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.alpha
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.draw.shadow
 import androidx.compose.ui.graphics.Brush.Companion.linearGradient
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ContentScale
-import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextDirection
@@ -51,13 +56,14 @@ import ir.androidcoder.varzesh360.R
 import ir.androidcoder.varzesh360.newsIntent.NewsIntent
 import ir.androidcoder.varzesh360.newsState.NewsState
 import ir.androidcoder.varzesh360.screen.ui.theme.NoColor
+import ir.androidcoder.varzesh360.util.LoadingAnimation
 import ir.androidcoder.varzesh360.viewModel.NewsViewModel
+import kotlinx.coroutines.delay
 
 @Composable
 fun NewsScreen(newsViewModel: NewsViewModel) {
 
-    val context = LocalContext.current
-    var counter by remember { mutableStateOf(1) }
+    var counter by remember { mutableIntStateOf(1) }
     var newsData by remember { mutableStateOf<List<NewsEntity>?>(null) }
 
     LaunchedEffect(counter) {
@@ -81,6 +87,8 @@ fun NewsScreen(newsViewModel: NewsViewModel) {
 
         }
 
+        delay(2000)
+
     }
 
 
@@ -88,39 +96,50 @@ fun NewsScreen(newsViewModel: NewsViewModel) {
         Modifier
             .fillMaxSize()
             .padding(horizontal = 24.dp)
-            .padding(top = 42.dp, bottom = 8.dp)
+            .padding(top = 38.dp, bottom = 8.dp),
+        horizontalAlignment = Alignment.CenterHorizontally,
+        verticalArrangement = Arrangement.Center
     ) {
 
-        CostumeToolbar(
-            {  },
-            {  }
-        )
+        if (newsData != null) {
 
-        SearchNews(
-            textValue = newsViewModel.searchValue,
-            counter,
-            {
-                newsViewModel.searchValue = it
-            },
-            {
-                counter++
-            },
-            {
-                counter = 1
-            }
-        )
 
-        NewsHorizontal(newsData)
+            CostumeToolbar(
+                { },
+                { }
+            )
 
-        NewsVertical(newsData)
+            SearchNews(
+                textValue = newsViewModel.searchValue,
+                counter,
+                {
+                    newsViewModel.searchValue = it
+                },
+                {
+                    counter++
+                },
+                {
+                    counter = 1
+                }
+            )
 
+            NewsHorizontal(newsData)
+
+            NewsVertical(newsData)
+
+
+        } else {
+
+            LoadingAnimation()
+
+        }
 
     }
 
 }
 
 @Composable
-fun CostumeToolbar(onProfileClicked :() -> Unit , onAlarmClicked :() -> Unit){
+fun CostumeToolbar(onProfileClicked: () -> Unit, onAlarmClicked: () -> Unit) {
 
     Row(
         modifier = Modifier
@@ -169,7 +188,7 @@ fun SearchNews(
     Row(
         modifier = Modifier
             .fillMaxWidth()
-            .padding(top = 14.dp),
+            .padding(top = 8.dp),
         horizontalArrangement = Arrangement.SpaceBetween,
         verticalAlignment = Alignment.CenterVertically
     ) {
@@ -181,26 +200,26 @@ fun SearchNews(
             shape = RoundedCornerShape(18.dp)
         )
 
-       Surface(
-        modifier = Modifier
-            .border(1.dp, Color.LightGray, RoundedCornerShape(18.dp))
-            .padding(horizontal = 28.dp)
-            .padding(vertical = 18.dp)
-            .combinedClickable(
-                onClick = { onCounterClicked.invoke() },
-                onLongClick = { onCounterLongClicked.invoke() }
-            )
-    ) {
+        Surface(
+            modifier = Modifier
+                .border(1.dp, Color.LightGray, RoundedCornerShape(18.dp))
+                .padding(horizontal = 28.dp)
+                .padding(vertical = 18.dp)
+                .combinedClickable(
+                    onClick = { onCounterClicked.invoke() },
+                    onLongClick = { onCounterLongClicked.invoke() }
+                )
+        ) {
 
-        Text(
-            text = counter.toString(),
-            style = TextStyle(
-                fontWeight = FontWeight.Bold,
-                fontSize = 18.sp
+            Text(
+                text = counter.toString(),
+                style = TextStyle(
+                    fontWeight = FontWeight.Bold,
+                    fontSize = 18.sp
+                )
             )
-        )
 
-    }
+        }
 
     }
 
@@ -215,10 +234,10 @@ fun NewsHorizontal(newsData: List<NewsEntity>?) {
         val evenIndexedNews = newsData.filterIndexed { index, _ -> index % 2 == 0 }
 
         LazyRow(
-            modifier = Modifier.padding(top = 32.dp)
+            modifier = Modifier.padding(top = 22.dp)
         ) {
             items(evenIndexedNews.size) { newsItem ->
-                NewsItemHorizontal(evenIndexedNews[newsItem])
+                AnimatedNewsItem(evenIndexedNews[newsItem], newsItem)
             }
         }
     }
@@ -226,7 +245,26 @@ fun NewsHorizontal(newsData: List<NewsEntity>?) {
 }
 
 @Composable
-fun NewsItemHorizontal(newsEntity: NewsEntity) {
+fun AnimatedNewsItem(newsEntity: NewsEntity, index: Int) {
+    var startAnimation by remember { mutableStateOf(false) }
+    val alpha by animateFloatAsState(
+        targetValue = if (startAnimation) 1f else 0f,
+        animationSpec = tween(
+            durationMillis = 1500,
+            delayMillis = index * 100 // Delay each item for a staggered effect
+        ), label = ""
+    )
+
+    LaunchedEffect(Unit) {
+        delay(100) // Small delay before starting the animation
+        startAnimation = true
+    }
+
+    NewsItemHorizontal(newsEntity, alpha)
+}
+
+@Composable
+fun NewsItemHorizontal(newsEntity: NewsEntity, alpha: Float) {
 
     Box(
         modifier = Modifier
@@ -234,7 +272,7 @@ fun NewsItemHorizontal(newsEntity: NewsEntity) {
             .width(379.dp)
             .padding(end = 16.dp)
             .shadow(12.dp, RoundedCornerShape(32.dp), true)
-
+            .alpha(alpha)
     ) {
 
 
@@ -272,15 +310,16 @@ fun NewsItemHorizontal(newsEntity: NewsEntity) {
                 ),
                 color = Color.White,
                 modifier = Modifier
-                    .padding(bottom = 24.dp , end = 18.dp , start = 18.dp),
+                    .padding(bottom = 24.dp, end = 18.dp, start = 18.dp),
                 maxLines = 3
-                )
+            )
 
         }
 
     }
 
 }
+
 
 //Vertical
 @Composable
@@ -295,10 +334,9 @@ fun NewsVertical(newsData: List<NewsEntity>?) {
             Modifier.padding(top = 16.dp)
         ) {
 
-            Log.v("tetsindext", evenIndexedNews.toString())
-
             items(evenIndexedNews.size) { newsItem ->
-                NewsItemVertical(evenIndexedNews[newsItem])
+                if (newsItem != 0)
+                    AnimatedNewsItemVer(evenIndexedNews[newsItem], newsItem)
             }
 
         }
@@ -308,7 +346,26 @@ fun NewsVertical(newsData: List<NewsEntity>?) {
 }
 
 @Composable
-fun NewsItemVertical(newsEntity: NewsEntity) {
+fun AnimatedNewsItemVer(newsEntity: NewsEntity, index: Int) {
+    var startAnimation by remember { mutableStateOf(false) }
+    val alpha by animateFloatAsState(
+        targetValue = if (startAnimation) 1f else 0f,
+        animationSpec = tween(
+            durationMillis = 300,
+            delayMillis = index * 100 // Delay each item for a staggered effect
+        ), label = ""
+    )
+
+    LaunchedEffect(Unit) {
+        delay(100) // Small delay before starting the animation
+        startAnimation = true
+    }
+
+    NewsItemVertical(newsEntity, alpha)
+}
+
+@Composable
+fun NewsItemVertical(newsEntity: NewsEntity, alpha: Float) {
 
     Box(
         modifier = Modifier
@@ -316,6 +373,7 @@ fun NewsItemVertical(newsEntity: NewsEntity) {
             .width(379.dp)
             .padding(bottom = 16.dp)
             .shadow(12.dp, RoundedCornerShape(32.dp), true)
+            .alpha(alpha)
 
     ) {
 
@@ -354,7 +412,7 @@ fun NewsItemVertical(newsEntity: NewsEntity) {
                 ),
                 color = Color.White,
                 modifier = Modifier
-                    .padding(bottom = 24.dp , end = 18.dp , start = 18.dp),
+                    .padding(bottom = 24.dp, end = 18.dp, start = 18.dp),
                 maxLines = 3
             )
 
@@ -363,4 +421,3 @@ fun NewsItemVertical(newsEntity: NewsEntity) {
     }
 
 }
-
