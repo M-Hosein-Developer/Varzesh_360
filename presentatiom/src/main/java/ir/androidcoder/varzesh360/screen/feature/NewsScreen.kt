@@ -151,7 +151,7 @@ fun CostumeToolbar(onProfileClicked: () -> Unit, onAlarmClicked: () -> Unit) {
     ) {
 
         AsyncImage(
-            model = R.drawable.ic_launcher_background,
+            model = R.drawable.channels4_profile,
             contentDescription = null,
             modifier = Modifier
                 .clip(RoundedCornerShape(16.dp))
