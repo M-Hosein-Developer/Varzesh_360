@@ -86,54 +86,6 @@ fun MainUi(newsViewModel: NewsViewModel) {
     }
 
 
-//    if (isVisible) {
-//        NavigationBar(
-//            modifier = Modifier
-//                .wrapContentSize(align = Alignment.BottomCenter)
-//                .height(112.dp)
-//                .padding(horizontal = 42.dp)
-//                .padding(bottom = 32.dp, top = 12.dp)
-//                .clip(RoundedCornerShape(32.dp))
-//        ) {
-//
-//            NavigationBarItem(
-//                modifier = Modifier
-//                    .align(Alignment.CenterVertically)
-//                    .padding(top = 24.dp),
-//                selected = false,
-//                onClick = { navController.navigate(MyScreen.NewsScreen.route) },
-//                icon = {
-//                    Icon(
-//                        imageVector = Icons.Outlined.Home,
-//                        contentDescription = null
-//                    )
-//                },
-//                label = {
-//                    Text(text = "Home")
-//                }
-//            )
-//
-//            NavigationBarItem(
-//                modifier = Modifier
-//                    .align(Alignment.CenterVertically)
-//                    .padding(top = 24.dp),
-//                selected = false,
-//                onClick = { navController.navigate(MyScreen.SettingScreen.route) },
-//                icon = {
-//                    Icon(
-//                        imageVector = Icons.Outlined.Settings,
-//                        contentDescription = null
-//                    )
-//                },
-//                label = {
-//                    Text(text = "Setting")
-//                }
-//            )
-//
-//        }
-//    }
-
-
     AnimatedVisibility(
         visible = isVisible,
         enter = slideInVertically(
