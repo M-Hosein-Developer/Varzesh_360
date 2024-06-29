@@ -50,6 +50,8 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextDirection
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.navigation.NavController
+import androidx.navigation.NavHostController
 import coil.compose.AsyncImage
 import ir.androidcoder.domain.entities.NewsEntity
 import ir.androidcoder.varzesh360.R
@@ -61,7 +63,7 @@ import ir.androidcoder.varzesh360.viewModel.NewsViewModel
 import kotlinx.coroutines.delay
 
 @Composable
-fun NewsScreen(newsViewModel: NewsViewModel , showBottomNav :(Boolean) -> Unit) {
+fun NewsScreen(newsViewModel: NewsViewModel, navController : NavController, showBottomNav :(Boolean) -> Unit) {
 
     var counter by remember { mutableIntStateOf(1) }
     var newsData by remember { mutableStateOf<List<NewsEntity>?>(null) }
@@ -123,11 +125,19 @@ fun NewsScreen(newsViewModel: NewsViewModel , showBottomNav :(Boolean) -> Unit) 
                 }
             )
 
-            NewsHorizontal(newsData)
-
-            NewsVertical(newsData){
-                showBottomNav.invoke(it)
+            NewsHorizontal(newsData) {
+                navController.navigate("")
             }
+
+            NewsVertical(
+                newsData,
+                {
+                showBottomNav.invoke(it)
+                },
+                {
+                    navController.navigate("")
+                }
+            )
 
 
         } else {
@@ -229,7 +239,7 @@ fun SearchNews(
 
 //Horizontal
 @Composable
-fun NewsHorizontal(newsData: List<NewsEntity>?) {
+fun NewsHorizontal(newsData: List<NewsEntity>?, onItemClicked: (String) -> Unit) {
 
     if (newsData != null) {
 
@@ -239,7 +249,7 @@ fun NewsHorizontal(newsData: List<NewsEntity>?) {
             modifier = Modifier.padding(top = 22.dp)
         ) {
             items(evenIndexedNews.size) { newsItem ->
-                AnimatedNewsItem(evenIndexedNews[newsItem], newsItem)
+                AnimatedNewsItem(evenIndexedNews[newsItem], newsItem) { onItemClicked.invoke(it) }
             }
         }
     }
@@ -247,7 +257,7 @@ fun NewsHorizontal(newsData: List<NewsEntity>?) {
 }
 
 @Composable
-fun AnimatedNewsItem(newsEntity: NewsEntity, index: Int) {
+fun AnimatedNewsItem(newsEntity: NewsEntity, index: Int, onItemClicked: (String) -> Unit) {
     var startAnimation by remember { mutableStateOf(false) }
     val alpha by animateFloatAsState(
         targetValue = if (startAnimation) 1f else 0f,
@@ -262,11 +272,11 @@ fun AnimatedNewsItem(newsEntity: NewsEntity, index: Int) {
         startAnimation = true
     }
 
-    NewsItemHorizontal(newsEntity, alpha)
+    NewsItemHorizontal(newsEntity, alpha) { onItemClicked.invoke(it) }
 }
 
 @Composable
-fun NewsItemHorizontal(newsEntity: NewsEntity, alpha: Float) {
+fun NewsItemHorizontal(newsEntity: NewsEntity, alpha: Float, onItemClicked: (String) -> Unit) {
 
     Box(
         modifier = Modifier
@@ -275,6 +285,7 @@ fun NewsItemHorizontal(newsEntity: NewsEntity, alpha: Float) {
             .padding(end = 16.dp)
             .shadow(12.dp, RoundedCornerShape(32.dp), true)
             .alpha(alpha)
+            .clickable { onItemClicked.invoke(newsEntity.id) }
     ) {
 
 
@@ -325,7 +336,11 @@ fun NewsItemHorizontal(newsEntity: NewsEntity, alpha: Float) {
 
 //Vertical
 @Composable
-fun NewsVertical(newsData: List<NewsEntity>? , showBottomNav :(Boolean) -> Unit) {
+fun NewsVertical(
+    newsData: List<NewsEntity>?,
+    showBottomNav: (Boolean) -> Unit,
+    onItemClicked: (String) -> Unit
+) {
 
 
     if (newsData != null) {
@@ -345,7 +360,11 @@ fun NewsVertical(newsData: List<NewsEntity>? , showBottomNav :(Boolean) -> Unit)
 
 
                 if (newsItem != 0)
-                    AnimatedNewsItemVer(evenIndexedNews[newsItem], newsItem)
+                    AnimatedNewsItemVer(evenIndexedNews[newsItem], newsItem) {
+                        onItemClicked.invoke(
+                            it
+                        )
+                    }
             }
 
         }
@@ -355,7 +374,7 @@ fun NewsVertical(newsData: List<NewsEntity>? , showBottomNav :(Boolean) -> Unit)
 }
 
 @Composable
-fun AnimatedNewsItemVer(newsEntity: NewsEntity, index: Int) {
+fun AnimatedNewsItemVer(newsEntity: NewsEntity, index: Int, onItemClicked: (String) -> Unit) {
     var startAnimation by remember { mutableStateOf(false) }
     val alpha by animateFloatAsState(
         targetValue = if (startAnimation) 1f else 0f,
@@ -370,11 +389,11 @@ fun AnimatedNewsItemVer(newsEntity: NewsEntity, index: Int) {
         startAnimation = true
     }
 
-    NewsItemVertical(newsEntity, alpha)
+    NewsItemVertical(newsEntity, alpha) { onItemClicked.invoke(it) }
 }
 
 @Composable
-fun NewsItemVertical(newsEntity: NewsEntity, alpha: Float) {
+fun NewsItemVertical(newsEntity: NewsEntity, alpha: Float, onItemClicked: (String) -> Unit) {
 
     Box(
         modifier = Modifier
@@ -383,6 +402,7 @@ fun NewsItemVertical(newsEntity: NewsEntity, alpha: Float) {
             .padding(bottom = 16.dp)
             .shadow(12.dp, RoundedCornerShape(32.dp), true)
             .alpha(alpha)
+            .clickable { onItemClicked.invoke(newsEntity.id) }
 
     ) {
 

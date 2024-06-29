@@ -76,7 +76,7 @@ fun MainUi(newsViewModel: NewsViewModel) {
     NavHost(navController = navController, startDestination = MyScreen.NewsScreen.route) {
 
         composable(MyScreen.NewsScreen.route) {
-            NewsScreen(newsViewModel){ isVisible = it }
+            NewsScreen(newsViewModel , navController){ isVisible = it }
         }
 
         composable(MyScreen.SettingScreen.route) {
