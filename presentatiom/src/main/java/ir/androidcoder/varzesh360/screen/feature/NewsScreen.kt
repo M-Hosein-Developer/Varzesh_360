@@ -59,6 +59,7 @@ import ir.androidcoder.varzesh360.newsIntent.NewsIntent
 import ir.androidcoder.varzesh360.newsState.NewsState
 import ir.androidcoder.varzesh360.screen.ui.theme.NoColor
 import ir.androidcoder.varzesh360.util.LoadingAnimation
+import ir.androidcoder.varzesh360.util.MyScreen
 import ir.androidcoder.varzesh360.viewModel.NewsViewModel
 import kotlinx.coroutines.delay
 
@@ -126,7 +127,7 @@ fun NewsScreen(newsViewModel: NewsViewModel, navController : NavController, show
             )
 
             NewsHorizontal(newsData) {
-                navController.navigate("")
+                navController.navigate(MyScreen.DetailScreen.route + "/" + it)
             }
 
             NewsVertical(
@@ -135,7 +136,7 @@ fun NewsScreen(newsViewModel: NewsViewModel, navController : NavController, show
                 showBottomNav.invoke(it)
                 },
                 {
-                    navController.navigate("")
+                    navController.navigate(MyScreen.DetailScreen.route + "/" + it)
                 }
             )
 
