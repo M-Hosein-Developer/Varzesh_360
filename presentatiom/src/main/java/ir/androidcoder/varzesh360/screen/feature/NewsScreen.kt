@@ -16,6 +16,8 @@ import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.absolutePadding
+import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
@@ -103,7 +105,7 @@ fun NewsScreen(newsViewModel: NewsViewModel, navController : NavController, show
         Modifier
             .fillMaxSize()
             .padding(horizontal = 24.dp)
-            .padding(top = 38.dp, bottom = 8.dp),
+            .padding(top = 18.dp, bottom = 8.dp),
         horizontalAlignment = Alignment.CenterHorizontally,
         verticalArrangement = Arrangement.Center
     ) {
@@ -113,18 +115,11 @@ fun NewsScreen(newsViewModel: NewsViewModel, navController : NavController, show
 
 
             CostumeToolbar(
+                counter,
+
                 {
                     context.startActivity(Intent(Intent.ACTION_VIEW , Uri.parse("https://football360.ir/")))
 
-                },
-                { }
-            )
-
-            SearchNews(
-                textValue = newsViewModel.searchValue,
-                counter,
-                {
-                    newsViewModel.searchValue = it
                 },
                 {
                     counter++
@@ -159,13 +154,14 @@ fun NewsScreen(newsViewModel: NewsViewModel, navController : NavController, show
 
 }
 
+@OptIn(ExperimentalFoundationApi::class)
 @Composable
-fun CostumeToolbar(onProfileClicked: () -> Unit, onAlarmClicked: () -> Unit) {
+fun CostumeToolbar(counter: Int , onProfileClicked: () -> Unit, onCounterClicked: () -> Unit, onCounterLongClicked: () -> Unit) {
 
     Row(
         modifier = Modifier
             .fillMaxWidth()
-            .height(56.dp),
+            .height(48.dp),
         horizontalArrangement = Arrangement.SpaceBetween,
         verticalAlignment = Alignment.CenterVertically
 
@@ -175,61 +171,21 @@ fun CostumeToolbar(onProfileClicked: () -> Unit, onAlarmClicked: () -> Unit) {
             model = R.drawable.channels4_profile,
             contentDescription = null,
             modifier = Modifier
+                .size(48.dp)
                 .clip(RoundedCornerShape(16.dp))
                 .clickable { onProfileClicked.invoke() }
         )
 
-        Icon(
-            imageVector = Icons.Outlined.Notifications,
-            contentDescription = null,
-            modifier = Modifier
-                .size(52.dp)
-                .clip(RoundedCornerShape(16.dp))
-                .clickable(true, "", null) { onAlarmClicked.invoke() }
-                .border(1.dp, Color.LightGray, RoundedCornerShape(16.dp))
-                .padding(8.dp)
-
-        )
-
-    }
-
-}
-
-@OptIn(ExperimentalFoundationApi::class)
-@Composable
-fun SearchNews(
-    textValue: String,
-    counter: Int,
-    onValueChange: (String) -> Unit,
-    onCounterClicked: () -> Unit,
-    onCounterLongClicked: () -> Unit
-) {
-
-
-    Row(
-        modifier = Modifier
-            .fillMaxWidth()
-            .padding(top = 8.dp),
-        horizontalArrangement = Arrangement.SpaceBetween,
-        verticalAlignment = Alignment.CenterVertically
-    ) {
-
-        OutlinedTextField(
-            value = textValue,
-            onValueChange = { onValueChange.invoke(it) },
-            label = { Text(text = "جستجو") },
-            shape = RoundedCornerShape(18.dp)
-        )
-
-        Surface(
+        Column(
             modifier = Modifier
                 .border(1.dp, Color.LightGray, RoundedCornerShape(18.dp))
-                .padding(horizontal = 28.dp)
-                .padding(vertical = 18.dp)
+                .size(48.dp)
                 .combinedClickable(
                     onClick = { onCounterClicked.invoke() },
                     onLongClick = { onCounterLongClicked.invoke() }
-                )
+                ),
+            verticalArrangement = Arrangement.Center,
+            horizontalAlignment = Alignment.CenterHorizontally
         ) {
 
             Text(
