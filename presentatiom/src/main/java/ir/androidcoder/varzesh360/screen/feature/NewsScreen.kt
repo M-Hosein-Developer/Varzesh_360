@@ -2,6 +2,8 @@
 
 package ir.androidcoder.varzesh360.screen.feature
 
+import android.content.Intent
+import android.net.Uri
 import android.util.Log
 import androidx.compose.animation.core.animateFloatAsState
 import androidx.compose.animation.core.tween
@@ -45,6 +47,7 @@ import androidx.compose.ui.draw.shadow
 import androidx.compose.ui.graphics.Brush.Companion.linearGradient
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ContentScale
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextDirection
@@ -68,6 +71,7 @@ fun NewsScreen(newsViewModel: NewsViewModel, navController : NavController, show
 
     var counter by remember { mutableIntStateOf(1) }
     var newsData by remember { mutableStateOf<List<NewsEntity>?>(null) }
+    val context = LocalContext.current
 
     LaunchedEffect(counter) {
 
@@ -104,11 +108,15 @@ fun NewsScreen(newsViewModel: NewsViewModel, navController : NavController, show
         verticalArrangement = Arrangement.Center
     ) {
 
+
         if (newsData != null) {
 
 
             CostumeToolbar(
-                { },
+                {
+                    context.startActivity(Intent(Intent.ACTION_VIEW , Uri.parse("https://football360.ir/")))
+
+                },
                 { }
             )
 
