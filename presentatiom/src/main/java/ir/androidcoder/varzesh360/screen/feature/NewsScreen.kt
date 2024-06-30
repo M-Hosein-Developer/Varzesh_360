@@ -176,6 +176,14 @@ fun CostumeToolbar(counter: Int , onProfileClicked: () -> Unit, onCounterClicked
                 .clickable { onProfileClicked.invoke() }
         )
 
+        Text(
+            text = "فوتبال 360",
+            style = TextStyle(
+                fontSize = 24.sp,
+                fontWeight = FontWeight.Bold
+            )
+        )
+        
         Column(
             modifier = Modifier
                 .border(1.dp, Color.LightGray, RoundedCornerShape(18.dp))

@@ -126,7 +126,7 @@ fun MainUi(newsViewModel: NewsViewModel) {
                     )
                 },
                 label = {
-                    Text(text = "Home")
+                    Text(text = "خانه")
                 }
             )
 
@@ -142,7 +142,7 @@ fun MainUi(newsViewModel: NewsViewModel) {
                     )
                 },
                 label = {
-                    Text(text = "Setting")
+                    Text(text = "تنظیمات")
                 }
             )
         }
