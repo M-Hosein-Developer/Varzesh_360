@@ -116,8 +116,7 @@ fun MainUi(newsViewModel: NewsViewModel) {
         ) {
             NavigationBarItem(
                 modifier = Modifier
-                    .align(Alignment.CenterVertically)
-                    .padding(top = 24.dp),
+                    .align(Alignment.CenterVertically),
                 selected = false,
                 onClick = { navController.navigate(MyScreen.NewsScreen.route) },
                 icon = {
@@ -133,8 +132,7 @@ fun MainUi(newsViewModel: NewsViewModel) {
 
             NavigationBarItem(
                 modifier = Modifier
-                    .align(Alignment.CenterVertically)
-                    .padding(top = 24.dp),
+                    .align(Alignment.CenterVertically),
                 selected = false,
                 onClick = { navController.navigate(MyScreen.SettingScreen.route) },
                 icon = {
