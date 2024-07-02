@@ -326,7 +326,7 @@ fun NewsVertical(
 
             items(evenIndexedNews.size) { newsItem ->
 
-                if (newsItem > 1)
+                if (newsItem > 2)
                     showBottomNav.invoke(false)
                 else
                     showBottomNav.invoke(true)
