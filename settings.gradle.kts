@@ -21,5 +21,5 @@ dependencyResolutionManagement {
 
 rootProject.name = "Varzesh 360"
 include(":presentatiom")
-include(":data")
 include(":domain")
+include(":data")
