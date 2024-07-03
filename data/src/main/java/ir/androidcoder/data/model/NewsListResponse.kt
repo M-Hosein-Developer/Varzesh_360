@@ -15,13 +15,13 @@ data class NewsListResponse(
         val id: String = "",
         val infoAPI: String = "",
         val link: String = "",
-        val live_detail: Any? = null,
+        val live_detail: String = "",
         val post_type: String = "",
         val primary_media: PrimaryMedia = PrimaryMedia(),
         val published_at: Int = 0,
         val slug: String = "",
         val sub_title: String = "",
-        val super_title: Any? = null,
+        val super_title: String = "",
         val title: String = ""
     ) {
         data class PrimaryMedia(

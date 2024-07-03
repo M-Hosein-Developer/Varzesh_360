@@ -6,13 +6,13 @@ data class NewsEntity(
     val id: String,
     val infoAPI: String,
     val link: String,
-    val live_detail: Any,
+    val live_detail: String,
     val post_type: String,
     val primary_media: PrimaryMedia,
     val published_at: Int,
     val slug: String,
     val sub_title: String,
-    val super_title: Any,
+    val super_title: String,
     val title: String
 ) {
     data class PrimaryMedia(
