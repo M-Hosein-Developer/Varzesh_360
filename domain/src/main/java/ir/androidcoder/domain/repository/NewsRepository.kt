@@ -6,4 +6,6 @@ interface NewsRepository {
 
     suspend fun getNews(pageNumber : Int) : List<NewsEntity>
 
+    suspend fun getNewsDetailFromDb(id : String) : NewsEntity
+
 }
