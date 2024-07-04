@@ -89,7 +89,7 @@ fun MainUi(newsViewModel: NewsViewModel) {
             route = MyScreen.DetailScreen.route + "/{DetailNav}",
             arguments = listOf(navArgument("DetailNav"){type = NavType.StringType})
         ){
-            DetailScreen(navController , it.arguments!!.getString("DetailNav", "-1"))
+            DetailScreen(navController , it.arguments!!.getString("DetailNav", "-1") , newsViewModel)
         }
 
     }
