@@ -8,4 +8,6 @@ class NewsUseCaseImpl(private val newsRepository: NewsRepository) : NewsUseCase 
 
     override suspend fun getNews(pageNumber : Int): List<NewsEntity> = newsRepository.getNews(pageNumber)
 
+    override suspend fun getNewsFromDbById(id: String): NewsEntity = newsRepository.getNewsDetailFromDb(id)
+
 }

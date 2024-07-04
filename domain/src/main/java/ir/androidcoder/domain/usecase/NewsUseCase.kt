@@ -6,4 +6,6 @@ interface NewsUseCase {
 
     suspend fun getNews(pageNumber: Int) : List<NewsEntity>
 
+    suspend fun getNewsFromDbById(id : String) : NewsEntity
+
 }
