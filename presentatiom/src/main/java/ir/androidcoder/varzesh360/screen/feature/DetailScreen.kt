@@ -1,7 +1,9 @@
 package ir.androidcoder.varzesh360.screen.feature
 
+import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.padding
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.automirrored.filled.KeyboardArrowLeft
 import androidx.compose.material3.ExperimentalMaterial3Api
@@ -15,8 +17,11 @@ import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
+import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.layout.ContentScale
+import androidx.compose.ui.text.style.TextAlign
+import androidx.compose.ui.unit.dp
 import androidx.navigation.NavHostController
 import coil.compose.AsyncImage
 import ir.androidcoder.domain.entities.NewsEntity
@@ -25,10 +30,11 @@ import ir.androidcoder.varzesh360.newsState.NewsDetailState
 import ir.androidcoder.varzesh360.viewModel.NewsViewModel
 
 @Composable
-fun DetailScreen(navController: NavHostController, id: String, newsViewModel: NewsViewModel) {
+fun DetailScreen(navController: NavHostController, id: String, newsViewModel: NewsViewModel , showBottomNav : (Boolean) -> Unit) {
+
+    showBottomNav.invoke(false)
 
     var data by remember { mutableStateOf<NewsEntity?>(null) }
-
 
     LaunchedEffect(Unit) {
         newsViewModel.dataIntent.send(NewsIntent.FetchNewsDataFromDb(id))
@@ -47,7 +53,6 @@ fun DetailScreen(navController: NavHostController, id: String, newsViewModel: Ne
 
         }
     }
-
 
     Column(
         Modifier
@@ -86,12 +91,19 @@ fun DetailToolbar(onBackPressed: () -> Unit) {
 @Composable
 fun FullScreenImage(data: NewsEntity) {
 
-    AsyncImage(
-        model =  data.primary_media.file,
-        contentDescription = null,
-        contentScale = ContentScale.Crop,
-        modifier = Modifier.fillMaxSize()
-    )
+    Box(
+        Modifier.fillMaxSize()
+    ) {
+
+        AsyncImage(
+            model = data.primary_media.file,
+            contentDescription = null,
+            contentScale = ContentScale.Crop,
+            modifier = Modifier.fillMaxSize()
+        )
+
+
+    }
 
 }
 

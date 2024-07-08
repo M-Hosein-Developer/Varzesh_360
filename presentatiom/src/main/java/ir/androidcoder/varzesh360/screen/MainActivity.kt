@@ -88,8 +88,10 @@ fun MainUi(newsViewModel: NewsViewModel) {
         composable(
             route = MyScreen.DetailScreen.route + "/{DetailNav}",
             arguments = listOf(navArgument("DetailNav"){type = NavType.StringType})
-        ){
-            DetailScreen(navController , it.arguments!!.getString("DetailNav", "-1") , newsViewModel)
+        ){ it ->
+            DetailScreen(navController , it.arguments!!.getString("DetailNav", "-1") , newsViewModel){
+                isVisible = it
+            }
         }
 
     }
