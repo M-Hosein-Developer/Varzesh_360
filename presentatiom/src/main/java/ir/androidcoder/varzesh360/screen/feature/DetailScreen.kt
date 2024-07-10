@@ -109,11 +109,8 @@ fun FullScreenImage(data: NewsEntity) {
             modifier = Modifier.fillMaxSize()
         )
 
-        Text(
-            text = data.title,
-            modifier = Modifier.align(
-                Alignment.BottomCenter
-            )
+        Column(
+            modifier = Modifier
                 .background(
                     brush = linearGradient(
                         colors = listOf(NoColor, MaterialTheme.colorScheme.onPrimary),
@@ -122,14 +119,36 @@ fun FullScreenImage(data: NewsEntity) {
                     )
                 )
                 .padding(horizontal = 28.dp)
-                .padding(bottom = 72.dp , top = 150.dp),
-            textAlign = TextAlign.End,
-            style = TextStyle(
-                fontSize = 24.sp,
-                fontWeight = FontWeight.Bold,
-                fontFamily = MaterialTheme.typography.bodyLarge.fontFamily
+                .padding(bottom = 72.dp, top = 150.dp)
+                .align(Alignment.BottomCenter)
+        ) {
+
+            Text(
+                text = data.title,
+                textAlign = TextAlign.End,
+                style = TextStyle(
+                    fontSize = 24.sp,
+                    fontWeight = FontWeight.Bold,
+                    fontFamily = MaterialTheme.typography.bodyLarge.fontFamily
+                ),
+                modifier = Modifier.align(Alignment.End)
             )
-        )
+
+            Text(
+                text = data.sub_title,
+                textAlign = TextAlign.End,
+                style = TextStyle(
+                    fontSize = 18.sp,
+                    fontFamily = MaterialTheme.typography.bodyLarge.fontFamily
+                ),
+                modifier = Modifier.padding(top = 16.dp)
+                    .align(Alignment.End)
+            )
+
+
+        }
+
+
     }
 
 }
