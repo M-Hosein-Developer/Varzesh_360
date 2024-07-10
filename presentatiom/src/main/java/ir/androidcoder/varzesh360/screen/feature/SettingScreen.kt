@@ -29,6 +29,7 @@ import androidx.compose.ui.unit.dp
 fun SettingScreen(){
 
     var dynamic by remember { mutableStateOf(false) }
+    var dark by remember { mutableStateOf(false) }
 
     Column(
         modifier = Modifier
@@ -40,9 +41,20 @@ fun SettingScreen(){
 
         }
 
-        ThemeSetting(dynamic){
+        ThemeSetting(
+
+            dynamic,
+            {
             dynamic = it
-        }
+            },
+
+            dark,
+            {
+                dark = it
+            },
+
+
+        )
 
     }
 
@@ -72,7 +84,9 @@ fun SettingToolbar(onResetClicked :() -> Unit){
 @Composable
 fun ThemeSetting(
     dynamicThemeState : Boolean ,
-    onDynamicThemeState :(Boolean) -> Unit
+    onDynamicThemeState: (Boolean) -> Unit,
+    darkThemeState: Boolean,
+    onDarkThemeState: (Boolean) -> Unit
 ){
 
     Column(
@@ -81,6 +95,7 @@ fun ThemeSetting(
             .padding(horizontal = 12.dp),
     ) {
 
+        //Dynamic Theme
         Row(
             modifier = Modifier.fillMaxWidth(),
             verticalAlignment = Alignment.CenterVertically,
@@ -96,6 +111,38 @@ fun ThemeSetting(
                 checked = dynamicThemeState,
                 onCheckedChange = {
                     onDynamicThemeState.invoke(it)
+                },
+                thumbContent = if (dynamicThemeState) {
+                    {
+                        Icon(
+                            imageVector = Icons.Filled.Check,
+                            contentDescription = null,
+                            modifier = Modifier.size(SwitchDefaults.IconSize),
+                        )
+                    }
+                } else {
+                    null
+                }
+            )
+
+        }
+
+        //Dark Theme
+        Row(
+            modifier = Modifier.fillMaxWidth(),
+            verticalAlignment = Alignment.CenterVertically,
+            horizontalArrangement = Arrangement.End
+        ) {
+
+            Text(
+                text = "تم دارک",
+                Modifier.padding(end = 12.dp)
+            )
+
+            Switch(
+                checked = darkThemeState,
+                onCheckedChange = {
+                    onDarkThemeState.invoke(it)
                 },
                 thumbContent = if (dynamicThemeState) {
                     {
