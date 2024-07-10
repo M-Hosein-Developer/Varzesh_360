@@ -129,7 +129,8 @@ fun ThemeSetting(
 
         //Dark Theme
         Row(
-            modifier = Modifier.fillMaxWidth(),
+            modifier = Modifier.fillMaxWidth()
+                .padding(top = 12.dp),
             verticalAlignment = Alignment.CenterVertically,
             horizontalArrangement = Arrangement.End
         ) {
@@ -144,7 +145,7 @@ fun ThemeSetting(
                 onCheckedChange = {
                     onDarkThemeState.invoke(it)
                 },
-                thumbContent = if (dynamicThemeState) {
+                thumbContent = if (darkThemeState) {
                     {
                         Icon(
                             imageVector = Icons.Filled.Check,
