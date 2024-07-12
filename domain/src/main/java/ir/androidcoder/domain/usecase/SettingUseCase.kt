@@ -4,6 +4,6 @@ import ir.androidcoder.domain.entities.SettingEntity
 
 interface SettingUseCase {
 
-    suspend fun getSetting() : SettingEntity
+    suspend fun getSetting(setting : SettingEntity) : SettingEntity
 
 }
