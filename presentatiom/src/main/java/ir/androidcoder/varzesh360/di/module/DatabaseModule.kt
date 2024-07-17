@@ -26,5 +26,9 @@ object DatabaseModule {
     @Singleton
     fun provideNewsDao(database: MyDatabase) = database.newsDao()
 
+    @Provides
+    @Singleton
+    fun provideSettingDao(database: MyDatabase) = database.settingDao()
+
 
 }
