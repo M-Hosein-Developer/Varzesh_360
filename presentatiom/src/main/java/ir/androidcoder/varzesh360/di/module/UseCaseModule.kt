@@ -21,6 +21,6 @@ class UseCaseModule {
 
     @Provides
     @Singleton
-    fun provideNewsUseCase(settingRepository: SettingRepository) : SettingUseCaseImpl = SettingUseCaseImpl(settingRepository)
+    fun provideSettingUseCase(settingRepository: SettingRepository) : SettingUseCaseImpl = SettingUseCaseImpl(settingRepository)
 
 }
