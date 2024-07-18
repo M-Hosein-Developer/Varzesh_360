@@ -6,6 +6,8 @@ import ir.androidcoder.domain.usecase.SettingUseCase
 
 class SettingUseCaseImpl(private val settingRepository: SettingRepository) : SettingUseCase {
 
-    override suspend fun getSetting(setting: SettingEntity): SettingEntity = settingRepository.getSetting(setting)
+    override suspend fun setSetting(setting: SettingEntity) = settingRepository.setSetting(setting)
+
+    override suspend fun getSetting(): SettingEntity = settingRepository.getSetting()
 
 }
