@@ -38,8 +38,10 @@ class SettingViewModel @Inject constructor(private val settingUseCase: SettingUs
 
     private fun themeSetting(data: SettingEntity) = viewModelScope.launch {
 
+        settingUseCase.setSetting(data)
+
         try {
-            _settingState.value = SettingState.SettingData(settingUseCase.getSetting(data))
+            _settingState.value = SettingState.SettingData(settingUseCase.getSetting())
         }catch (e : Exception){
             _settingState.value = SettingState.SettingError(e.localizedMessage)
         }
