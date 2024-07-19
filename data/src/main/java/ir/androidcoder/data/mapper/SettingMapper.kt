@@ -4,6 +4,7 @@ import ir.androidcoder.data.local.entities.SettingEntity
 
 fun SettingEntity.toDomainSetting() = ir.androidcoder.domain.entities.SettingEntity(
 
+    id = id,
     darkTheme = darkTheme,
     dynamicTheme = dynamicTheme,
 
@@ -11,6 +12,7 @@ fun SettingEntity.toDomainSetting() = ir.androidcoder.domain.entities.SettingEnt
 
 fun ir.androidcoder.domain.entities.SettingEntity.toEntitySetting() = SettingEntity(
 
+    id = id,
     darkTheme = darkTheme,
     dynamicTheme = dynamicTheme,
 
