@@ -7,6 +7,7 @@ import androidx.room.PrimaryKey
 data class SettingEntity(
 
     @PrimaryKey
+    val id : Int = 0,
     val dynamicTheme : Boolean,
     val darkTheme : Boolean,
 
