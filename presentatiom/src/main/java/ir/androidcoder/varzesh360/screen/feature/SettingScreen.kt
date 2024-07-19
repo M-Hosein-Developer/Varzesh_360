@@ -17,19 +17,48 @@ import androidx.compose.material3.Text
 import androidx.compose.material3.TextButton
 import androidx.compose.material3.TopAppBar
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
+import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
+import ir.androidcoder.domain.entities.SettingEntity
+import ir.androidcoder.varzesh360.newsIntent.SettingIntent
+import ir.androidcoder.varzesh360.newsState.SettingState
+import ir.androidcoder.varzesh360.viewModel.SettingViewModel
+import kotlinx.coroutines.launch
 
 @Composable
-fun SettingScreen(){
+fun SettingScreen(settingViewModel: SettingViewModel) {
 
     var dynamic by remember { mutableStateOf(false) }
     var dark by remember { mutableStateOf(false) }
+    val scope = rememberCoroutineScope()
+
+    LaunchedEffect(Unit) {
+
+        settingViewModel.dataIntent.send(SettingIntent.FetchSettingData1)
+
+        settingViewModel.settingState.collect {
+            when (it) {
+
+                is SettingState.Idle -> {}
+                is SettingState.SettingData -> {
+                    dynamic = it.setting.dynamicTheme
+                    dark = it.setting.darkTheme
+                }
+
+                is SettingState.SettingError -> {}
+
+            }
+        }
+
+    }
+
 
     Column(
         modifier = Modifier
@@ -45,12 +74,34 @@ fun SettingScreen(){
 
             dynamic,
             {
-            dynamic = it
+                dynamic = it
+                scope.launch {
+                    settingViewModel.dataIntent.send(
+                        SettingIntent.FetchSettingData(
+                            SettingEntity(
+                                0,
+                                it,
+                                dark
+                            )
+                        )
+                    )
+                }
             },
 
             dark,
             {
                 dark = it
+                scope.launch {
+                    settingViewModel.dataIntent.send(
+                        SettingIntent.FetchSettingData(
+                            SettingEntity(
+                                0,
+                                dynamic,
+                                it
+                            )
+                        )
+                    )
+                }
             },
 
 
@@ -129,7 +180,8 @@ fun ThemeSetting(
 
         //Dark Theme
         Row(
-            modifier = Modifier.fillMaxWidth()
+            modifier = Modifier
+                .fillMaxWidth()
                 .padding(top = 12.dp),
             verticalAlignment = Alignment.CenterVertically,
             horizontalArrangement = Arrangement.End
