@@ -30,15 +30,18 @@ class SettingViewModel @Inject constructor(private val settingUseCase: SettingUs
 
         dataIntent.consumeAsFlow().collect {
             when (it) {
-                is SettingIntent.FetchSettingData -> themeSetting(it.setting)
+                is SettingIntent.FetchSettingData -> themeSetSetting(it.setting)
+                is SettingIntent.FetchSettingData1 -> themeGetSetting()
             }
         }
 
     }
 
-    private fun themeSetting(data: SettingEntity) = viewModelScope.launch {
+    private fun themeSetSetting(setting: SettingEntity) = viewModelScope.launch {
+        settingUseCase.setSetting(setting)
+    }
 
-        settingUseCase.setSetting(data)
+    private fun themeGetSetting() = viewModelScope.launch {
 
         try {
             _settingState.value = SettingState.SettingData(settingUseCase.getSetting())
