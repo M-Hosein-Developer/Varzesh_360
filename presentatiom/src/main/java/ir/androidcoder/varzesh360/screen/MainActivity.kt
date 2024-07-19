@@ -43,11 +43,13 @@ import ir.androidcoder.varzesh360.screen.feature.SettingScreen
 import ir.androidcoder.varzesh360.screen.ui.theme.Varzesh360Theme
 import ir.androidcoder.varzesh360.util.MyScreen
 import ir.androidcoder.varzesh360.viewModel.NewsViewModel
+import ir.androidcoder.varzesh360.viewModel.SettingViewModel
 
 @AndroidEntryPoint
 class MainActivity : ComponentActivity() {
 
     private val newsViewModel: NewsViewModel by viewModels()
+    private val settingViewModel : SettingViewModel by viewModels()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -58,7 +60,7 @@ class MainActivity : ComponentActivity() {
                     modifier = Modifier.fillMaxSize()
                 ) {
 
-                    MainUi(newsViewModel)
+                    MainUi(newsViewModel , settingViewModel)
 
                 }
             }
@@ -69,7 +71,7 @@ class MainActivity : ComponentActivity() {
 
 @SuppressLint("UnusedMaterial3ScaffoldPaddingParameter")
 @Composable
-fun MainUi(newsViewModel: NewsViewModel) {
+fun MainUi(newsViewModel: NewsViewModel, settingViewModel: SettingViewModel) {
 
     val navController = rememberNavController()
     var isVisible by remember { mutableStateOf(true) }
@@ -82,7 +84,7 @@ fun MainUi(newsViewModel: NewsViewModel) {
         }
 
         composable(MyScreen.SettingScreen.route) {
-            SettingScreen()
+            SettingScreen(settingViewModel)
         }
 
         composable(
