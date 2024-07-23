@@ -39,6 +39,7 @@ class SettingViewModel @Inject constructor(private val settingUseCase: SettingUs
 
     private fun themeSetSetting(setting: SettingEntity) = viewModelScope.launch {
         settingUseCase.setSetting(setting)
+        themeGetSetting()
     }
 
     private fun themeGetSetting() = viewModelScope.launch {
