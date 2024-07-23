@@ -80,7 +80,7 @@ class MainActivity : ComponentActivity() {
 
 
         setContent {
-            Varzesh360Theme {
+            Varzesh360Theme(darkTheme = themeSetting!!.darkTheme , dynamicColor = themeSetting!!.dynamicTheme) {
                 Surface(
                     modifier = Modifier.fillMaxSize()
                 ) {
