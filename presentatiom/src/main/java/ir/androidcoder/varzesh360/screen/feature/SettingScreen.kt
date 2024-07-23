@@ -67,7 +67,9 @@ fun SettingScreen(settingViewModel: SettingViewModel) {
     ) {
 
         SettingToolbar{
-
+            scope.launch {
+                settingViewModel.dataIntent.send(SettingIntent.FetchSettingData(SettingEntity(id = 0, dynamicTheme = false, darkTheme = false)))
+            }
         }
 
         ThemeSetting(
