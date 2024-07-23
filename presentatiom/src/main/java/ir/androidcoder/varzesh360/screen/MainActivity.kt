@@ -31,12 +31,16 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.unit.dp
+import androidx.lifecycle.lifecycleScope
 import androidx.navigation.NavType
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
 import androidx.navigation.navArgument
 import dagger.hilt.android.AndroidEntryPoint
+import ir.androidcoder.domain.entities.SettingEntity
+import ir.androidcoder.varzesh360.newsIntent.SettingIntent
+import ir.androidcoder.varzesh360.newsState.SettingState
 import ir.androidcoder.varzesh360.screen.feature.DetailScreen
 import ir.androidcoder.varzesh360.screen.feature.NewsScreen
 import ir.androidcoder.varzesh360.screen.feature.SettingScreen
@@ -44,6 +48,7 @@ import ir.androidcoder.varzesh360.screen.ui.theme.Varzesh360Theme
 import ir.androidcoder.varzesh360.util.MyScreen
 import ir.androidcoder.varzesh360.viewModel.NewsViewModel
 import ir.androidcoder.varzesh360.viewModel.SettingViewModel
+import kotlinx.coroutines.launch
 
 @AndroidEntryPoint
 class MainActivity : ComponentActivity() {
@@ -53,6 +58,26 @@ class MainActivity : ComponentActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+
+        var themeSetting by mutableStateOf<SettingEntity?>(null)
+
+        lifecycleScope.launch {
+
+            settingViewModel.dataIntent.send(SettingIntent.FetchSettingData1)
+
+            settingViewModel.settingState.collect{
+
+                when(it){
+
+                    is SettingState.Idle -> {}
+                    is SettingState.SettingData -> { themeSetting = it.setting }
+                    is SettingState.SettingError -> {}
+
+                }
+
+            }
+        }
+
 
         setContent {
             Varzesh360Theme {
